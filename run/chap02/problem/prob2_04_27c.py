@@ -6,11 +6,10 @@ from typing import List, Tuple  # Any, Dict, Set
 
 import matplotlib.pyplot as plt
 
-
-def prob2_27a(self):
+def prob2_04_27c(self):
 	"""Page 228
 	Linear Systems and Signals, Lathi
-	Prob 2.4-27 (a) Find and sketch c(t) = x1(t) * x2(t) for the pairs of functions
+	Prob 2.4-27 (c) Find and sketch c(t) = x1(t) * x2(t) for the pairs of functions
 	illustrated in Fig. P2.4-27.
 	"""
 	fcn_name:str = currentframe().f_code.co_name
@@ -28,19 +27,17 @@ def prob2_27a(self):
 
 	# ---- chatgpt -------------------
 	# Define time vector (from -10 to 10 seconds for a wide enough range)
-	t_sig = np.linspace(-8, 8, 1000)
+	t_sig = np.linspace(-4, 4, 1000)
 
-	# Define x1(t): value 1 between 4 and 6 seconds, zero elsewhere
-	pulse1 = np.zeros_like(t_sig)
-	pulse1[(t_sig >= 4) & (t_sig <= 6)] = 1
+	# Define x1(t): unit step at t=-2s
+	sig1:np.ndarray = np.heaviside(t_sig+2, 0)
 
-	# Define x2(t): value 2 between -5 and -4 seconds, zero elsewhere
-	pulse2 = np.zeros_like(t_sig)
-	pulse2[(t_sig >= -5) & (t_sig <= -4)] = 2
+	# Define x2(t): pulse 2 between -2 and 1 seconds
+	sig2:np.ndarray = np.heaviside(t_sig+2, 0) - np.heaviside(t_sig-1, 0)
 
 	# Compute the convolution of the two pulses
-	conv_mode:str = 'full'
-	conv_result = np.convolve(pulse1, pulse2, mode=conv_mode) * (t_sig[1] - t_sig[0])  # Multiply by delta t for correct scaling
+	conv_mode:str = 'same'
+	conv_result = np.convolve(sig1, sig2, mode=conv_mode) * (t_sig[1] - t_sig[0])  # Multiply by delta t for correct scaling
 	if( conv_mode == 'same' ):
 		t_con:np.ndarray = t_sig
 	elif( conv_mode == 'full' ):
@@ -51,7 +48,7 @@ def prob2_27a(self):
 
 	# Plot x1(t)
 	plt.subplot(3, 1, 1)
-	plt.plot(t_sig, pulse1, label='x1(t)', color='blue')
+	plt.plot(t_sig, sig1, label='x1(t)', color='blue')
 	plt.title('x1(t)')
 	plt.xlabel('Time (seconds)')
 	plt.ylabel('Amplitude')
@@ -59,7 +56,7 @@ def prob2_27a(self):
 
 	# Plot x2(t)
 	plt.subplot(3, 1, 2)
-	plt.plot(t_sig, pulse2, label='x2(t)', color='r')
+	plt.plot(t_sig, sig2, label='x2(t)', color='r')
 	plt.title('x2(t)')
 	plt.xlabel('Time (seconds)')
 	plt.ylabel('Amplitude')
@@ -67,7 +64,6 @@ def prob2_27a(self):
 
 	# Plot the Convolution of x1(t) and x2(t)
 	plt.subplot(3, 1, 3)
-	# t = np.linspace(-8, 8, 1999)
 	plt.plot(t_con, conv_result, label='Convolution', color='purple')
 	plt.title( f"{conv_mode}: Convolution of x1(t) and x2(t)" )
 	plt.xlabel('Time (seconds)')
@@ -76,7 +72,6 @@ def prob2_27a(self):
 
 	plt.tight_layout()
 	plt.show()
-	plt.close()
 
 	return
 
