@@ -11,6 +11,7 @@ import argparse
 # import errno
 import sys
 
+from chap01 import class_chap01
 from chap02 import class_chap02
 
 
@@ -42,6 +43,7 @@ def main() -> int:
 		# print( f"class_name: {class_name}" )
 		# Convert the camel-case classname to all lowercase.
 		cllow:str = class_name.lower()
+
 		# Generate the module name as below; again, this is per project architecture
 		# module-by-subdir and source-code fnames.
 		module_name:str = f"class_{cllow}"
@@ -81,7 +83,8 @@ def parse_the_args():
 	"""
 	desc="""microelx.py [ Chap01 | Chap02 | Chap02 | Chap05 ]  PATH-to-config.ini
 	Example runtime commands:
-	(.venvPy3-12-0) C:\\SourceCode\\GitHub\\electronix\\linearsys_lathi\\run> python run.py Chap02  ..\\config\\chap02\\problem\\config_problem__21-30.ini
+	(.venvPy3-12-0) .\\run> python run.py Chap01  ..\\config\\chap01\\example\\config_example__01-10.ini
+	(.venvPy3-12-0) .\\run> python run.py Chap02  ..\\config\\chap02\\problem\\config_problem__21-30.ini
 	"""
 
 	parser = argparse.ArgumentParser( prog=desc )
@@ -89,6 +92,8 @@ def parse_the_args():
 	# then determine which sub-command class to instantiate.
 	# For example, if sub-command == SEARCH, then cl=task_seach.class_search.Search(...).
 	subparsers = parser.add_subparsers( dest='command', required=False, help='Specify chapter' )
+	parser_chap01 = subparsers.add_parser( 'Chap01', help='run Chapter 01 problems' )
+	parser_chap01.add_argument( 'config_file', help='PATH to config.ini' )
 	parser_chap02 = subparsers.add_parser( 'Chap02', help='run Chapter 02 problems' )
 	parser_chap02.add_argument( 'config_file', help='PATH to config.ini' )
 	# parser_chap77 = subparsers.add_parser( 'Chap77', help='run Chapter XX problems' )
@@ -113,6 +118,7 @@ def parse_the_args():
 		sys.exit(1)
 	if (args.version):
 		print( f"Chap01 v0.1.0" )
+		print( f"Chap02 v0.1.0" )
 		sys.exit(1)
 	global chapter_subcmd
 	chapter_subcmd = args.command
